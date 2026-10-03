@@ -69,3 +69,9 @@
       ansible.builtin.import_role:
         name: pi
       tags: [pi]
+
+    # Last: ble.sh's attach line must stay at the bottom of .bashrc, after nvm's.
+    - name: Bash prompt and line editor
+      ansible.builtin.import_role:
+        name: shell
+      tags: [shell]

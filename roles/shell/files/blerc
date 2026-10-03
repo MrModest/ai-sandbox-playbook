@@ -1,0 +1,5 @@
+# Keep typing responsive on a small VM: ble.sh runs bash code on every keystroke.
+# Suggest only after a 100ms pause instead of after every key.
+bleopt complete_auto_delay=100
+# Don't disable highlight_filename: ble.sh also uses it to confirm commands exist,
+# so without it every external command (e.g. `clear`) is drawn red like a typo.

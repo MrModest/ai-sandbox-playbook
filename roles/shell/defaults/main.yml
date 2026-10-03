@@ -1,0 +1,4 @@
+---
+shell_starship_version: "v1.26.0"
+# ble.sh tags are stale (2023); upstream recommends tracking master, so pin a commit.
+shell_blesh_commit: "d81fd54feb0d996fdff20dca27eaf0201f7015cc"

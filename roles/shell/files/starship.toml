@@ -1,0 +1,118 @@
+'$schema' = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+format = """
+[░▒▓](cyan)$directory[](bg:none fg:cyan)\
+$fill\
+[](bg:none fg:#FCA17D)$time
+[░▒▓](#640c7f)$git_branch[](fg:#640c7f bg:#24b710)\
+$git_status[](fg:#24b710 bg:none)\
+$fill\
+([](red)$status[](red))\
+([](yellow)$cmd_duration[](yellow))
+
+(bg:none fg:none)\
+$character
+"""
+
+[fill]
+symbol = ' '
+style = 'bold green'
+
+[directory]
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+truncation_symbol = '…/'
+truncate_to_repo = true
+before_repo_root_style = 'bg:cyan fg:#22272e'
+style = 'bg:cyan fg:#22272e italic'
+repo_root_style = 'bg:cyan fg:#22272e italic'
+repo_root_format ='[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style)'
+format = '[$path]($style)[$read_only]($read_only_style)'
+
+[time]
+format = '[$time ]($style)'
+disabled = false
+time_format = '%T'
+style = 'bg:#FCA17D fg:#22272e'
+
+[status]
+style = 'bg:red fg:#22272e'
+symbol = ' '
+format = '[$symbol$status]($style)'
+map_symbol = true
+disabled = false
+
+[username]
+disabled = true
+format = '[$user]($style)'
+style_user = 'blue bold'
+style_root = 'black bold'
+show_always = true
+
+[hostname]
+disabled = true
+ssh_only = false
+format = '[$hostname](blue bold)'
+
+[shell]
+disabled = false
+style = 'bg:#86BBD8 fg:#22272e dimmed'
+format = '[$indicator]($style)'
+
+[cmd_duration]
+format = '[⏱ $duration]($style)'
+style = 'bg:yellow fg:#22272e'
+
+[docker_context]
+format = '\[[$symbol$context]($style)\]'
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style)'
+style = 'bg:#640c7f fg:#FD9F09'
+
+[git_status]
+format = '([$all_status$ahead_behind]($style))'
+modified = '*'
+style = 'bg:#24b710 fg:#640c7f'
+
+[battery]
+disabled = true
+
+[kubernetes]
+disabled = false
+symbol = ' '
+detect_env_vars = ['AWS_PROFILE']
+format = '[$symbol$context ](bg:cyan fg:black)[$namespace](bg:cyan fg:blue dimmed)'
+
+[gcloud]
+disabled = true
+
+[java]
+disabled = true
+format = '\[[$symbol($version)]($style)\]'
+symbol ='☕'
+
+[gradle]
+disabled = true
+format = '\[[$symbol($version)]($style)\]'
+
+[kotlin]
+disabled = true
+format = '\[[$symbol($version)]($style)\]'
+
+[nodejs]
+format = '\[[$symbol($version)]($style)\]'
+
+[package]
+format = '[$symbol$version]($style) '
+
+[python]
+format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
+
+[rust]
+format = '[$symbol($version)]($style)'
+
+[sudo]
+format = '\[[as $symbol]($style)\]'

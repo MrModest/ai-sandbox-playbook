@@ -60,11 +60,19 @@
     - { bin: herdr, url: "https://herdr.dev/install.sh" }
     - { bin: uv, url: "https://astral.sh/uv/install.sh" }
 
+- name: List uv tools
+  ansible.builtin.command: uv tool list
+  register: base_uv_list
+  changed_when: false
+
+# Versions are minimums: install when missing or older, never downgrade a newer one.
 - name: Install uv tools (serena)
-  ansible.builtin.command: "uv tool install {{ '--python ' + item.python if item.python is defined else '' }} '{{ item.spec }}'"
-  register: base_uv_install
-  changed_when: "'already installed' not in base_uv_install.stderr"
+  ansible.builtin.command: "uv tool install {{ '--python ' + item.python if item.python is defined else '' }} '{{ item.name }}=={{ item.version }}'"
   loop: "{{ base_uv_tools }}"
+  when: base_uv_installed is version(item.version, '<')
+  changed_when: true
+  vars:
+    base_uv_installed: "{{ ((base_uv_list.stdout | regex_search('(?m)^' ~ (item.name | regex_escape) ~ ' v(\\S+)$', '\\1')) or ['0']) | first }}"
 
 - name: Create rtk and herdr config dirs
   ansible.builtin.file:

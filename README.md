@@ -35,7 +35,7 @@ On the target: SSH access as the user in `inventory.yml`, with sudo.
 ansible-playbook playbook.yml
 ```
 
-Run a single role with tags: `base`, `nodejs`, `skills`, `claude`, `codex`, `pi`. Example:
+Run a single role with tags: `base`, `nodejs`, `skills`, `claude`, `codex`, `pi`, `shell`. Example:
 
 ```sh
 ansible-playbook playbook.yml --tags claude
@@ -60,7 +60,8 @@ The playbook is idempotent: a second run should report `changed=0`.
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |
 | `codex` | ponytail plugin, `config.toml`, `auth.json` |
 | `pi` | config, extensions, packages, MCP servers, `auth.json` |
+| `shell` | bash prompt: starship (same `starship.toml` as macOS) and ble.sh for autosuggestions + syntax highlighting |
 
 MCP servers are declared once in `playbook.yml` (`mcp_servers`) and rendered into each harness's own format. MCPs bundled with plugins or extensions aren't listed there.
 
-Pinned versions live in each role's `defaults/main.yml`; `node_version` is in `playbook.yml`.
+Versions in each role's `defaults/main.yml` are minimums: a tool is installed when missing or older, and a newer one (e.g. after `pi update`) is never downgraded. Standalone binaries (rtk, hl, yq, herdr, starship, Claude Code) are only installed when missing. `node_version` is in `playbook.yml`.
