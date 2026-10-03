@@ -1,0 +1,36 @@
+---
+- name: Create Pi permission-system extension dir
+  ansible.builtin.file:
+    path: "{{ home }}/.pi/agent/extensions/pi-permission-system"
+    state: directory
+    mode: "0755"
+
+- name: Copy Pi config and extensions
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/"
+    dest: "{{ home }}/.pi/agent/"
+    mode: preserve
+
+- name: Write Pi MCP servers
+  ansible.builtin.copy:
+    dest: "{{ home }}/.pi/agent/mcp.json"
+    content: "{{ {'mcpServers': mcp_servers} | to_nice_json }}"
+    mode: "0600"
+
+- name: Template Pi permission-system config
+  ansible.builtin.template:
+    src: pi-permission-system.json.j2
+    dest: "{{ home }}/.pi/agent/extensions/pi-permission-system/config.json"
+    mode: "0644"
+
+- name: Write Pi auth
+  ansible.builtin.copy:
+    dest: "{{ home }}/.pi/agent/auth.json"
+    content: "{{ {'openai': {'type': 'api_key', 'key': vault_pi_openai_api_key}} | to_nice_json }}"
+    mode: "0600"
+
+- name: Install Pi packages
+  ansible.builtin.command: "pi install {{ item }}"
+  args:
+    creates: "{{ home }}/.pi/agent/{{ item | regex_replace('^npm:', 'npm/node_modules/') | regex_replace('^git:', 'git/') }}"
+  loop: "{{ pi_packages }}"

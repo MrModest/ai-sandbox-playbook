@@ -1,0 +1,78 @@
+{
+  "$schema": "https://raw.githubusercontent.com/gotgenes/pi-permission-system/main/schemas/permissions.schema.json",
+
+  "permission": {
+    "*": "allow",
+    "external_directory": {
+      "*": "ask",
+      "{{ ansible_env.HOME }}/Projects/": "allow",
+      "{{ ansible_env.HOME }}/Projects/*": "allow",
+      "{{ ansible_env.HOME }}/.pi": "allow",
+      "{{ ansible_env.HOME }}/.pi/*": "allow",
+      "{{ ansible_env.HOME }}/.agents/skills/*": "allow",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "allow",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "allow"
+    },
+    "write": {
+      "*": "allow",
+      "{{ ansible_env.HOME }}/Projects/": "ask",
+      "{{ ansible_env.HOME }}/Projects/*": "ask",
+      "{{ ansible_env.HOME }}/.pi": "ask",
+      "{{ ansible_env.HOME }}/.pi/*": "ask",
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask"
+    },
+    "edit": {
+      "*": "allow",
+      "{{ ansible_env.HOME }}/Projects/": "ask",
+      "{{ ansible_env.HOME }}/Projects/*": "ask",
+      "{{ ansible_env.HOME }}/.pi": "ask",
+      "{{ ansible_env.HOME }}/.pi/*": "ask",
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
+      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask"
+    },
+    "bash": {
+      "*": "allow",
+      "*{{ ansible_env.HOME }}/Projects": "ask",
+      "*{{ ansible_env.HOME }}/Projects/*": "ask",
+      "*{{ ansible_env.HOME }}/.pi": "ask",
+      "*{{ ansible_env.HOME }}/.pi/*": "ask",
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
+      "*{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
+      "*{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask",
+
+      "rm -rf /*": "deny",
+      "rm -fr /*": "deny",
+      "rm --recursive /*": "deny",
+      "rm -rf ~*": "deny",
+      "rm -fr ~*": "deny",
+      "rm --recursive ~*": "deny",
+      "rm -rf $HOME*": "deny",
+      "rm -fr $HOME*": "deny",
+      "rm --recursive $HOME*": "deny",
+
+      "dd *": "deny",
+      "mkfs *": "deny",
+      "format *": "deny",
+
+      "sudo rm *": "deny",
+      "sudo dd *": "deny",
+
+      "chmod -R 777 /*": "deny",
+      "chown -R * /*": "deny",
+
+      "shred *": "deny",
+      "wipefs *": "deny",
+
+      "killall *": "deny",
+      "pkill -9 *": "deny",
+      "crontab -r*": "deny",
+
+      "env": "deny",
+      "printenv": "deny",
+      "printenv *": "deny"
+    }
+  }
+}

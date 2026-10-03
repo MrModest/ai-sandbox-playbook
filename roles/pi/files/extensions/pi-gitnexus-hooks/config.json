@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "tools": ["read", "grep", "find", "bash", "read_many"],
+  "maxPatterns": 3,
+  "timeoutMs": 7000,
+  "minPatternLength": 3,
+  "secondaryPatterns": "fallback",
+  "ignoredPatterns": [
+    "index",
+    "config",
+    "settings",
+    "package",
+    "readme",
+    "license",
+    "changelog",
+    "utils",
+    "types",
+    "helpers",
+    "constants",
+    "test",
+    "spec"
+  ],
+  "showStatus": true
+}

@@ -1,0 +1,6 @@
+---
+base_rtk_version: "v0.50.0"
+base_hl_version: "v0.36.3"
+base_yq_version: "v4.54.1"
+base_uv_tools:
+  - { spec: "serena-agent==1.7.0", python: "3.13" }

@@ -1,0 +1,10 @@
+---
+nodejs_nvm_version: "v0.40.4"
+nodejs_pnpm_version: "10.33.2"
+nodejs_npm_globals:
+  - { name: "@openai/codex", version: "0.159.2" }
+  - { name: "@earendil-works/pi-coding-agent", version: "0.85.1", ignore_scripts: true }
+  - { name: gitnexus, version: "1.6.9" }
+  - { name: agent-browser, version: "0.27.0" }
+  - { name: typescript, version: "6.0.3" }
+  - { name: typescript-language-server, version: "5.3.0" }

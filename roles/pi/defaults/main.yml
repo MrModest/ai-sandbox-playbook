@@ -1,0 +1,2 @@
+---
+pi_packages: "{{ (lookup('file', role_path + '/files/settings.json') | from_json).packages }}"

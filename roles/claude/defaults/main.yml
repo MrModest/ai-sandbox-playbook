@@ -1,0 +1,13 @@
+---
+claude_marketplaces:
+  - anthropics/claude-plugins-official
+  - obra/superpowers-marketplace
+  - JuliusBrussee/caveman
+  - DietrichGebert/ponytail
+claude_settings: "{{ lookup('file', role_path + '/files/settings.json') | from_json }}"
+# Claude needs `type: http` on URL servers; stdio is its default.
+claude_mcp_servers: >-
+  {{ ((mcp_servers | dict2items | selectattr('value.url', 'defined')
+       | map('combine', {'value': {'type': 'http'}}, recursive=true) | list)
+    + (mcp_servers | dict2items | rejectattr('value.url', 'defined') | list))
+   | items2dict }}

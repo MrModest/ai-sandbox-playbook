@@ -1,0 +1,6 @@
+---
+ai-sandbox:
+  hosts:
+    192.168.178.58:
+      ansible_connection: ssh
+      ansible_user: me

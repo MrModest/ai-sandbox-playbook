@@ -1,0 +1,48 @@
+---
+- name: Install Claude Code
+  ansible.builtin.shell: "set -o pipefail && curl -fsSL https://claude.ai/install.sh | bash"
+  args:
+    executable: /bin/bash
+    creates: "{{ local_bin }}/claude"
+
+# creates: re-adding claude-plugins-official declares it in settings.json, which the copy below then reverts.
+- name: Add Claude plugin marketplaces
+  ansible.builtin.command: "claude plugin marketplace add {{ item }}"
+  args:
+    creates: "{{ home }}/.claude/plugins/marketplaces/{{ item | basename }}"
+  loop: "{{ claude_marketplaces }}"
+
+- name: Install enabled Claude plugins
+  ansible.builtin.command: "claude plugin install {{ item }}"
+  register: claude_plugin
+  changed_when: "'Successfully installed' in (claude_plugin.stdout + claude_plugin.stderr)"
+  loop: "{{ claude_settings.enabledPlugins | dict2items | selectattr('value') | map(attribute='key') }}"
+
+# After plugin installs: they rewrite settings.json, this pins the final version.
+- name: Copy Claude settings, CLAUDE.md, statusline
+  ansible.builtin.copy:
+    src: "{{ item.name }}"
+    dest: "{{ home }}/.claude/{{ item.name }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - { name: settings.json, mode: "0600" }
+    - { name: CLAUDE.md, mode: "0644" }
+    - { name: statusline-command.sh, mode: "0755" }
+
+- name: Read ~/.claude.json
+  ansible.builtin.slurp:
+    src: "{{ home }}/.claude.json"
+  register: claude_json
+  failed_when: false
+
+- name: Parse ~/.claude.json
+  ansible.builtin.set_fact:
+    claude_json_data: "{{ claude_json.content | default('e30=') | b64decode | from_json }}"
+
+# Claude rewrites this file with its own key order; only write when MCPs actually differ.
+- name: Configure Claude user-scope MCP servers
+  ansible.builtin.copy:
+    dest: "{{ home }}/.claude.json"
+    content: "{{ claude_json_data | combine({'mcpServers': claude_mcp_servers}) | to_nice_json }}"
+    mode: "0600"
+  when: claude_json_data.mcpServers | default({}) != claude_mcp_servers

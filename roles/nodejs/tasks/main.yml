@@ -1,0 +1,38 @@
+---
+- name: Install nvm and Node.js
+  ansible.builtin.shell: |
+    set -o pipefail
+    curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/{{ nodejs_nvm_version }}/install.sh | bash
+    . "$NVM_DIR/nvm.sh"
+    nvm install {{ node_version }}
+    nvm alias default {{ node_version }}
+  args:
+    executable: /bin/bash
+    creates: "{{ node_bin }}/node"
+  environment:
+    NVM_DIR: "{{ home }}/.nvm"
+
+- name: Check pnpm version
+  ansible.builtin.command: pnpm --version
+  register: nodejs_pnpm_current
+  changed_when: false
+  failed_when: false
+
+- name: Enable pnpm via corepack
+  ansible.builtin.shell: "corepack enable && corepack prepare pnpm@{{ nodejs_pnpm_version }} --activate"
+  when: nodejs_pnpm_current.stdout != nodejs_pnpm_version
+  changed_when: true
+
+- name: Install global npm packages
+  community.general.npm:
+    name: "{{ item.name }}"
+    version: "{{ item.version }}"
+    ignore_scripts: "{{ item.ignore_scripts | default(false) }}"
+    global: true
+    executable: "{{ node_bin }}/npm"
+  loop: "{{ nodejs_npm_globals }}"
+
+- name: Install agent-browser's Chrome
+  ansible.builtin.command: agent-browser install
+  args:
+    creates: "{{ home }}/.agent-browser/browsers"

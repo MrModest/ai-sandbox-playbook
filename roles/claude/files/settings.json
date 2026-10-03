@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "ENABLE_LSP_TOOL": "1",
+    "ENABLE_TOOL_SEARCH": "true",
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
+    "GIT_PAGER": "cat"
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "TodoWrite",
+      "ExitPlanMode",
+      "Skill"
+    ],
+    "deny": [],
+    "ask": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /:*)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf /:*)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf ~:*)",
+      "Bash(rm -rf ~/.claude)",
+      "Bash(rm -rf ~/.claude:*)",
+      "Bash(diskutil eraseDisk:*)",
+      "Bash(diskutil zeroDisk:*)",
+      "Bash(diskutil partitionDisk:*)",
+      "Bash(diskutil apfs deleteContainer:*)",
+      "Bash(diskutil apfs eraseVolume:*)",
+      "Bash(dd if=/dev/zero:*)",
+      "Bash(mkfs:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh repo edit --visibility public:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin --force:*)",
+      "Bash(git push origin -f:*)",
+      "Read(~/.ssh/id_*)",
+      "Read(~/.ssh/*.pem)",
+      "Read(~/.aws/credentials)",
+      "Read(~/.gnupg/private*)",
+      "Edit(~/.claude/settings.json)",
+      "Edit(~/.ssh/*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "typescript-lsp@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "claude-session-driver@superpowers-marketplace": true,
+    "superpowers@superpowers-marketplace": true,
+    "ponytail@ponytail": true
+  },
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "medium"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "high"
+    }
+  },
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(ansible-lint:*)",
+      "Bash(ansible-doc:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(ansible-vault edit:*)",
+      "Bash(ansible-playbook * --check)",
+      "Bash(ansible-playbook main.yml --tags *)"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: Public — MrModest/homeserver (github.com)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: Ansible Vault (`vars/vault.yml`, encrypted, password in `.vault_pass`); never commit `vars/vault.yml`, `inventory.yml`, or `.vault_pass`",
+      "**Default / protected branches**: Default branch `main`; no branch protection rules or rulesets listed via gh",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: Home server (192.168.178.34) and Pi-hole DNS (192.168.178.55) behind Tailscale VPN, no public exposure; router at 192.168.178.1",
+      "**Source control**: The trusted repo (MrModest/homeserver on github.com) and its origin remote only — public repo, so only this repo's own work belongs in commits/pushes",
+      "**Trusted internal domains**: mrmodest.duckdns.org (DuckDNS dynamic DNS domain used for app subdomains in this repo)",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: `vars/vault.yml` (encrypted secrets), `inventory.yml` (actual IPs, gitignored), `.vault_pass` (vault password), and per-app `.env` / `.env.j2` templates under `roles/deploy_*/templates/.env.j2` (passwords, API keys) — never commit these; keep local/vault-only",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: personal/hobby infrastructure automation (Ansible home-server configuration)",
+      "**Trusted repo**: MrModest/homeserver (this repo, public) and its origin remote — public visibility means only this repo's own work should be pushed here; secrets (vault, inventory, .vault_pass) are never cleared into it regardless of visibility",
+      "**Org-specific CLIs**: ansible, ansible-playbook, ansible-lint, ansible-doc, ansible-vault (routine within this repo)"
+    ]
+  }
+}

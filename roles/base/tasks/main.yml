@@ -1,0 +1,83 @@
+---
+# force: GitHub rotates this key (the 2022 one expired 2026-09); refetch picks up the new one.
+- name: Add GitHub CLI apt keyring
+  become: true
+  ansible.builtin.get_url:
+    url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+    dest: /etc/apt/keyrings/githubcli-archive-keyring.gpg
+    mode: "0644"
+    force: true
+
+- name: Add GitHub CLI apt repo
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/github-cli.list
+    content: "deb [arch=amd64 signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main\n"
+    mode: "0644"
+
+- name: Install apt packages
+  become: true
+  ansible.builtin.apt:
+    name: [git, curl, unzip, build-essential, jq, ripgrep, fd-find, gh, golang-go, gopls]
+    update_cache: true
+
+- name: Create ~/.local/bin
+  ansible.builtin.file:
+    path: "{{ local_bin }}"
+    state: directory
+    mode: "0755"
+
+- name: Link fdfind as fd
+  ansible.builtin.file:
+    src: /usr/bin/fdfind
+    dest: "{{ local_bin }}/fd"
+    state: link
+
+- name: Install yq
+  ansible.builtin.get_url:
+    url: "https://github.com/mikefarah/yq/releases/download/{{ base_yq_version }}/yq_linux_amd64"
+    dest: "{{ local_bin }}/yq"
+    mode: "0755"
+
+- name: Install rtk and hl
+  ansible.builtin.unarchive:
+    src: "{{ item.url }}"
+    dest: "{{ local_bin }}"
+    remote_src: true
+    creates: "{{ local_bin }}/{{ item.bin }}"
+  loop:
+    - { bin: rtk, url: "https://github.com/rtk-ai/rtk/releases/download/{{ base_rtk_version }}/rtk-x86_64-unknown-linux-musl.tar.gz" }
+    - { bin: hl, url: "https://github.com/pamburus/hl/releases/download/{{ base_hl_version }}/hl-linux-x86_64-gnu.tar.gz" }
+
+- name: Install herdr and uv
+  ansible.builtin.shell: "set -o pipefail && curl -fsSL {{ item.url }} | sh"
+  args:
+    executable: /bin/bash
+    creates: "{{ local_bin }}/{{ item.bin }}"
+  environment:
+    INSTALLER_NO_MODIFY_PATH: "1"
+  loop:
+    - { bin: herdr, url: "https://herdr.dev/install.sh" }
+    - { bin: uv, url: "https://astral.sh/uv/install.sh" }
+
+- name: Install uv tools (serena)
+  ansible.builtin.command: "uv tool install {{ '--python ' + item.python if item.python is defined else '' }} '{{ item.spec }}'"
+  register: base_uv_install
+  changed_when: "'already installed' not in base_uv_install.stderr"
+  loop: "{{ base_uv_tools }}"
+
+- name: Create rtk and herdr config dirs
+  ansible.builtin.file:
+    path: "{{ home }}/.config/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: [rtk, herdr]
+
+- name: Copy rtk and herdr configs
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ home }}/.config/{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - { src: rtk.toml, dest: rtk/config.toml }
+    - { src: herdr.toml, dest: herdr/config.toml }

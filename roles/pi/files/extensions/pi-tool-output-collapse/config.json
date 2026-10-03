@@ -1,0 +1,7 @@
+{
+  "enabled": true,
+  "collapseAfterLines": 10,
+  "collapsedLines": 10,
+  "tools": ["*"],
+  "excludeTools": ["edit", "write"]
+}

@@ -1,0 +1,35 @@
+{
+  "lastChangelogVersion": "0.85.1",
+  "skills": [],
+  "packages": [
+    "npm:pi-ghostty",
+    "npm:pi-caveman",
+    "npm:@heyhuynhgiabuu/pi-search",
+    "npm:pi-subagents",
+    "npm:@gotgenes/pi-permission-system",
+    "npm:pi-tool-display",
+    "npm:pi-workspace-history",
+    "npm:pi-effort",
+    "npm:pi-mono-clear",
+    "npm:pi-mcp-adapter",
+    "npm:@mrclrchtr/supi-context",
+    "npm:pi-paster",
+    "git:github.com/obra/superpowers",
+    "npm:@pi-stef/superpowers-adapter"
+  ],
+  "defaultThinkingLevel": "medium",
+  "hideThinkingBlock": false,
+  "editorPaddingX": 1,
+  "terminal": {
+    "clearOnShrink": true
+  },
+  "transport": "auto",
+  "collapseChangelog": true,
+  "treeFilterMode": "default",
+  "compaction": {
+    "enabled": true
+  },
+  "theme": "dark",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.6-sol"
+}

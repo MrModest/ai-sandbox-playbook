@@ -1,0 +1,22 @@
+---
+- name: Add ponytail Codex marketplace
+  ansible.builtin.command: codex plugin marketplace add https://github.com/DietrichGebert/ponytail.git
+  args:
+    creates: "{{ home }}/.codex/.tmp/marketplaces/ponytail"
+
+- name: Install ponytail Codex plugin
+  ansible.builtin.command: codex plugin add ponytail@ponytail
+  args:
+    creates: "{{ home }}/.codex/plugins/cache/ponytail/ponytail"
+
+- name: Template Codex config
+  ansible.builtin.template:
+    src: config.toml.j2
+    dest: "{{ home }}/.codex/config.toml"
+    mode: "0600"
+
+- name: Write Codex auth
+  ansible.builtin.copy:
+    dest: "{{ home }}/.codex/auth.json"
+    content: "{{ {'auth_mode': 'apikey', 'OPENAI_API_KEY': vault_codex_openai_api_key} | to_nice_json }}"
+    mode: "0600"

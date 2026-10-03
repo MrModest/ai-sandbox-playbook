@@ -1,0 +1,71 @@
+---
+- name: Provision AI coding agents (Claude Code, Codex, Pi)
+  hosts: ai-sandbox
+  vars_files:
+    - vars/vault.yml
+  vars:
+    ansible_become_pass: "{{ vault_become_pass }}"
+    home: "/home/{{ ansible_user }}"
+    local_bin: "{{ home }}/.local/bin"
+    node_version: "24.14.0"
+    node_bin: "{{ home }}/.nvm/versions/node/v{{ node_version }}/bin"
+    # Single source of MCP servers, rendered into every harness's own config format.
+    # Not listed: MCPs bundled with plugins/extensions (they ship and load their own).
+    # Shape: stdio -> command/args/env, http -> url/headers.
+    mcp_servers:
+      context7:
+        url: https://mcp.context7.com/mcp
+        headers: { CONTEXT7_API_KEY: "{{ vault_context7_api_key }}" }
+      deepwiki:
+        url: https://mcp.deepwiki.com/mcp
+      github:
+        url: https://api.githubcopilot.com/mcp
+        headers: { Authorization: "Bearer {{ vault_github_mcp_token }}" }
+      hatchdoor:
+        url: https://hatchdoor.modestlab.dev/mcp
+        headers: { Authorization: "Bearer {{ vault_hatchdoor_token }}" }
+      home_assistant_hacs:
+        url: "{{ vault_home_assistant_mcp_url }}"
+      serena:
+        command: serena
+        args: [start-mcp-server, --context, ide, --project-from-cwd, --open-web-dashboard, "false"]
+      gitnexus:
+        command: gitnexus
+        args: [mcp]
+      mcp-server-linkedin:
+        command: uvx
+        args: [mcp-server-linkedin@latest]
+        env: { UV_HTTP_TIMEOUT: "300" }
+  environment:
+    PATH: "{{ node_bin }}:{{ local_bin }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+  tasks:
+    - name: Base CLI tools
+      ansible.builtin.import_role:
+        name: base
+      tags: [base]
+
+    - name: Node.js and global npm packages
+      ansible.builtin.import_role:
+        name: nodejs
+      tags: [nodejs]
+
+    - name: Shared agent skills
+      ansible.builtin.import_role:
+        name: skills
+      tags: [skills]
+
+    - name: Claude Code
+      ansible.builtin.import_role:
+        name: claude
+      tags: [claude]
+
+    - name: Codex
+      ansible.builtin.import_role:
+        name: codex
+      tags: [codex]
+
+    - name: Pi
+      ansible.builtin.import_role:
+        name: pi
+      tags: [pi]
