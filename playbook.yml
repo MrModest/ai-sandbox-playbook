@@ -18,9 +18,6 @@
         headers: { CONTEXT7_API_KEY: "{{ vault_context7_api_key }}" }
       deepwiki:
         url: https://mcp.deepwiki.com/mcp
-      github:
-        url: https://api.githubcopilot.com/mcp
-        headers: { Authorization: "Bearer {{ vault_github_mcp_token }}" }
       hatchdoor:
         url: https://hatchdoor.modestlab.dev/mcp
         headers: { Authorization: "Bearer {{ vault_hatchdoor_token }}" }
