@@ -1,8 +1,8 @@
 ---
-- name: Install starship and ble.sh dependencies
+- name: Install zsh and prompt dependencies
   become: true
   ansible.builtin.apt:
-    name: [curl, git, make, gawk]
+    name: [curl, zsh, zsh-autosuggestions, zsh-syntax-highlighting, fzf, zoxide, eza]
 
 - name: Install starship
   ansible.builtin.shell: >-
@@ -18,33 +18,26 @@
     dest: "{{ home }}/.config/starship.toml"
     mode: "0644"
 
-- name: Clone ble.sh
-  ansible.builtin.git:
-    repo: https://github.com/akinomyoga/ble.sh.git
-    dest: "{{ home }}/.cache/ble.sh-src"
-    version: "{{ shell_blesh_commit }}"
-  notify: Build and install ble.sh
+- name: Create zsh data directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ home }}/.config/zsh"
+    - "{{ home }}/.cache"
+    - "{{ home }}/.local/share"
+    - "{{ home }}/.local/state"
+    - "{{ home }}/.xdg"
 
-# ble.sh must be sourced at the very top of .bashrc and attached at the very bottom.
-- name: Load ble.sh at top of .bashrc
-  ansible.builtin.blockinfile:
-    path: "{{ home }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED: ble.sh load"
-    insertbefore: BOF
-    block: |
-      [[ $- == *i* ]] && source -- ~/.local/share/blesh/ble.sh --attach=none
-
-- name: Init starship and attach ble.sh at bottom of .bashrc
-  ansible.builtin.blockinfile:
-    path: "{{ home }}/.bashrc"
-    marker: "# {mark} ANSIBLE MANAGED: prompt"
-    insertafter: EOF
-    block: |
-      eval "$(starship init bash)"
-      [[ ! ${BLE_VERSION-} ]] || ble-attach
-
-- name: Copy ble.sh config
+- name: Copy zsh config
   ansible.builtin.copy:
-    src: blerc
-    dest: "{{ home }}/.blerc"
+    src: zshrc
+    dest: "{{ home }}/.zshrc"
     mode: "0644"
+
+- name: Set zsh as the login shell
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: /usr/bin/zsh

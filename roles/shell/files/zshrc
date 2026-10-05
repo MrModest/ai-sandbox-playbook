@@ -1,0 +1,60 @@
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+export XDG_RUNTIME_DIR="$HOME/.xdg"
+export PATH="$HOME/.local/bin:$PATH"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+case ":$PATH:" in *":$PNPM_HOME:"*) ;; *) export PATH="$PNPM_HOME:$PATH" ;; esac
+[ -s "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
+[ -x /home/linuxbrew/.linuxbrew/bin/brew ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+compinit
+HISTFILE="$XDG_CONFIG_HOME/zsh/.zsh_history"
+HISTSIZE=10000
+SAVEHIST=10000
+setopt append_history auto_pushd hist_ignore_all_dups hist_reduce_blanks pushd_ignore_dups
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+[[ -r /usr/share/doc/fzf/examples/completion.zsh ]] && source /usr/share/doc/fzf/examples/completion.zsh
+[[ -r /usr/share/doc/fzf/examples/key-bindings.zsh ]] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+(( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
+
+alias show_path='print -l ${(s/:/)PATH}'
+alias dcu='docker compose up -d'
+alias dcd='docker compose down'
+alias lzd='lazydocker'
+alias ll='eza -lahg --icons=always --group-directories-first --time-style=long-iso'
+alias sll='sudo eza -lahg --icons=always --group-directories-first --time-style=long-iso'
+alias tree='eza -T -lahg --icons=always --group-directories-first --time-style=long-iso'
+alias sudo_tree='sudo eza -T -lahg --icons=always --group-directories-first --time-style=long-iso'
+alias tree-dirs='eza -T --only-dirs -lahg --icons=always --group-directories-first --time-style=long-iso'
+(( $+commands[bat] )) && alias bat='bat -f --wrap=never'
+(( ! $+commands[bat] && $+commands[batcat] )) && alias bat='batcat -f --wrap=never'
+(( $+commands[zoxide] )) && alias cd='z'
+(( $+commands[zoxide] )) && alias cdi='zi'
+
+cdp() { builtin cd "$HOME/Projects/$1"; }
+_cdp() { (( CURRENT == 2 )) && _files -/ -W "$HOME/Projects/$1"; }
+compdef _cdp cdp
+
+y() {
+  local tmp cwd
+  tmp="$(mktemp -t yazi-cwd.XXXXXX)"
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [[ -n "$cwd" && "$cwd" != "$PWD" ]]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
+}
+
+ssh-tmux() { local session_name="$1"; shift; ssh "$@" -t tmux new-session -A -s "$session_name"; }
+
+eval "$(starship init zsh)"
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

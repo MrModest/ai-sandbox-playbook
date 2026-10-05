@@ -48,7 +48,7 @@ The playbook is idempotent: a second run should report `changed=0`.
 ## After the first run
 
 - Claude Code uses OAuth: SSH in, run `claude`, then `/login`. Codex and Pi use the API keys from the vault.
-- Node comes from nvm, which loads only in interactive shells. Use `bash -lic '…'` for non-interactive commands over SSH.
+- Node comes from nvm, which loads only in interactive shells. Use `zsh -lic '…'` for non-interactive commands over SSH.
 
 ## Layout
 
@@ -60,7 +60,7 @@ The playbook is idempotent: a second run should report `changed=0`.
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |
 | `codex` | ponytail plugin, `config.toml`, `auth.json` |
 | `pi` | config, extensions, packages, MCP servers, `auth.json` |
-| `shell` | bash prompt: starship (same `starship.toml` as macOS) and ble.sh for autosuggestions + syntax highlighting |
+| `shell` | zsh: starship (same `starship.toml` as macOS), autosuggestions, and syntax highlighting |
 
 MCP servers are declared once in `playbook.yml` (`mcp_servers`) and rendered into each harness's own format. MCPs bundled with plugins or extensions aren't listed there.
 

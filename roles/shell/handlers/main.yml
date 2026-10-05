@@ -1,4 +1,0 @@
----
-- name: Build and install ble.sh
-  ansible.builtin.command: make -C {{ home }}/.cache/ble.sh-src install PREFIX={{ home }}/.local
-  changed_when: true
