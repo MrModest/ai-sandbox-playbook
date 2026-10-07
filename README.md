@@ -55,11 +55,11 @@ The playbook is idempotent: a second run should report `changed=0`.
 | Role | Installs |
 |---|---|
 | `base` | apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr, uv, serena + rtk/herdr configs |
-| `nodejs` | nvm, Node, pnpm, global npm packages (codex, pi, gitnexus, TypeScript LSP, agent-browser + its Chrome) |
+| `nodejs` | nvm, Node, pnpm, global npm packages (codex, gitnexus, TypeScript LSP, agent-browser + its Chrome) |
 | `skills` | `~/.agents/skills`, shared by all harnesses (Codex and Pi read it natively; Claude gets a `~/.claude/skills` symlink) |
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |
 | `codex` | ponytail plugin, `config.toml`, `auth.json` |
-| `pi` | config, extensions, packages, MCP servers, `auth.json` |
+| `pi` | managed Pi installation, config, extensions, packages, MCP servers, `auth.json` |
 | `shell` | zsh: starship (same `starship.toml` as macOS), autosuggestions, and syntax highlighting |
 
 MCP servers are declared once in `playbook.yml` (`mcp_servers`) and rendered into each harness's own format. MCPs bundled with plugins or extensions aren't listed there.

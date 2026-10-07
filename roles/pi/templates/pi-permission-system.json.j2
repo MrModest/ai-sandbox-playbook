@@ -9,9 +9,7 @@
       "{{ ansible_env.HOME }}/Projects/*": "allow",
       "{{ ansible_env.HOME }}/.pi": "allow",
       "{{ ansible_env.HOME }}/.pi/*": "allow",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "allow",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "allow",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "allow"
+      "{{ ansible_env.HOME }}/.agents/skills/*": "allow"
     },
     "write": {
       "*": "allow",
@@ -19,9 +17,7 @@
       "{{ ansible_env.HOME }}/Projects/*": "ask",
       "{{ ansible_env.HOME }}/.pi": "ask",
       "{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask"
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask"
     },
     "edit": {
       "*": "allow",
@@ -29,9 +25,7 @@
       "{{ ansible_env.HOME }}/Projects/*": "ask",
       "{{ ansible_env.HOME }}/.pi": "ask",
       "{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
-      "{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask"
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask"
     },
     "bash": {
       "*": "allow",
@@ -40,8 +34,6 @@
       "*{{ ansible_env.HOME }}/.pi": "ask",
       "*{{ ansible_env.HOME }}/.pi/*": "ask",
       "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
-      "*{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent": "ask",
-      "*{{ ansible_env.HOME }}/.config/nvm/versions/node/*/lib/node_modules/@earendil-works/pi-coding-agent/*": "ask",
 
       "rm -rf /*": "deny",
       "rm -fr /*": "deny",

@@ -1,4 +1,11 @@
 ---
+- name: Install Pi
+  ansible.builtin.shell: >-
+    set -o pipefail && curl -fsSL https://pi.dev/install.sh | sh
+  args:
+    executable: /bin/bash
+    creates: "{{ local_bin }}/pi"
+
 - name: Create Pi permission-system extension dir
   ansible.builtin.file:
     path: "{{ home }}/.pi/agent/extensions/pi-permission-system"
