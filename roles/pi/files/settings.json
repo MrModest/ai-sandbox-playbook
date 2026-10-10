@@ -17,6 +17,9 @@
     "git:github.com/obra/superpowers",
     "npm:@pi-stef/superpowers-adapter"
   ],
+  "extensions": [
+    "-builtin:mcp"
+  ],
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": false,
   "editorPaddingX": 1,

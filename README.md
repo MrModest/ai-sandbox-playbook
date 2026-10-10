@@ -7,7 +7,6 @@ Ansible playbook that provisions an Ubuntu 24.04 (x86_64) VM with Claude Code, C
 On the control machine:
 
 ```sh
-brew install ansible        # or: pipx install ansible
 ansible-galaxy collection install -r requirements.yml
 ```
 
@@ -50,11 +49,17 @@ The playbook is idempotent: a second run should report `changed=0`.
 - Claude Code uses OAuth: SSH in, run `claude`, then `/login`. Codex and Pi use the API keys from the vault.
 - Node comes from nvm, which loads only in interactive shells. Use `zsh -lic '…'` for non-interactive commands over SSH.
 
+### Pi MCP
+
+Pi uses `pi-mcp-adapter`; Pi built-in MCP stays disabled. Shared server definitions render to `~/.pi/agent/mcp.json`, while adapter-only behavior lives in `~/.pi/agent/mcp-adapter.json`.
+
+`mcpScript` is enabled for MCP-only JavaScript workflows: search, call, filter, aggregate, and return only selected output. `scriptSkill: "model"` exposes its usage skill to Pi automatically. Use compact `mcp(...)` calls for single lookups; use `mcpScript` for multi-call or bulk work. Run `/reload` after changing either MCP config file.
+
 ## Layout
 
 | Role | Installs |
 |---|---|
-| `base` | apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr, uv, serena + rtk/herdr configs |
+| `base` | Ansible, apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr, uv, serena + rtk/herdr configs |
 | `nodejs` | nvm, Node, pnpm, global npm packages (codex, gitnexus, TypeScript LSP, agent-browser + its Chrome) |
 | `skills` | `~/.agents/skills`, shared by all harnesses (Codex and Pi read it natively; Claude gets a `~/.claude/skills` symlink) |
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |

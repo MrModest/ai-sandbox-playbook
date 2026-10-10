@@ -18,7 +18,7 @@
 - name: Install apt packages
   become: true
   ansible.builtin.apt:
-    name: [git, curl, unzip, build-essential, jq, ripgrep, fd-find, gh, golang-go, gopls]
+    name: [ansible, git, curl, unzip, build-essential, jq, ripgrep, fd-find, gh, golang-go, gopls]
     update_cache: true
 
 - name: Create ~/.local/bin
