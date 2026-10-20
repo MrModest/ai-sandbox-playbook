@@ -21,6 +21,15 @@
     name: [ansible, git, curl, unzip, build-essential, jq, ripgrep, fd-find, gh, golang-go, gopls]
     update_cache: true
 
+# Ubuntu's pam_motd honors this per-user file, preventing the login banner and MOTD on SSH.
+- name: Suppress SSH login welcome message
+  ansible.builtin.file:
+    path: "{{ home }}/.hushlogin"
+    state: touch
+    access_time: preserve
+    modification_time: preserve
+    mode: "0644"
+
 - name: Create ~/.local/bin
   ansible.builtin.file:
     path: "{{ local_bin }}"
