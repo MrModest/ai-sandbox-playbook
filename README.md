@@ -67,7 +67,7 @@ The `cliproxy-provider` extension registers a `cliproxy` provider whose models c
 |---|---|
 | `base` | Ansible, apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr, uv, serena + rtk/herdr configs |
 | `nodejs` | nvm, Node, pnpm, global npm packages (codex, gitnexus, TypeScript LSP, agent-browser + its Chrome) |
-| `skills` | `~/.agents/skills`, shared by all harnesses (Codex and Pi read it natively; Claude gets a `~/.claude/skills` symlink) |
+| `skills` | `~/.agents/skills`, shared by all harnesses (Codex and Pi read it natively; Claude gets a per-skill symlink in `~/.claude/skills`, refreshed by a SessionStart hook) |
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |
 | `codex` | ponytail plugin, `config.toml`, `auth.json` |
 | `pi` | managed Pi installation, config, extensions, packages, MCP servers, `auth.json` |
