@@ -31,8 +31,8 @@
     - "{{ home }}/.xdg"
 
 - name: Copy zsh config
-  ansible.builtin.copy:
-    src: zshrc
+  ansible.builtin.template:
+    src: zshrc.j2
     dest: "{{ home }}/.zshrc"
     mode: "0644"
 
