@@ -1,6 +1,6 @@
 ---
 # ~/.agents/skills is the one shared skills dir. Codex and Pi read it natively;
-# Claude doesn't, so it gets a symlink.
+# Claude doesn't, so each skill gets a symlink in ~/.claude/skills.
 - name: Create agent config dirs
   ansible.builtin.file:
     path: "{{ home }}/{{ item }}"
@@ -14,21 +14,13 @@
     dest: "{{ home }}/.agents/skills/"
     mode: preserve
 
-- name: Link skills into Claude
-  ansible.builtin.file:
-    src: "{{ home }}/.agents/skills"
-    dest: "{{ home }}/.claude/skills"
-    state: link
-    force: true
+- name: Copy Claude skills link script
+  ansible.builtin.copy:
+    src: link-claude-skills.sh
+    dest: "{{ home }}/.agents/link-claude-skills.sh"
+    mode: "0755"
 
-# Deprecated Codex location; a link there makes Codex load every skill twice.
-- name: Check legacy Codex skills path
-  ansible.builtin.stat:
-    path: "{{ home }}/.codex/skills"
-  register: skills_codex_legacy
-
-- name: Remove legacy Codex skills link
-  ansible.builtin.file:
-    path: "{{ home }}/.codex/skills"
-    state: absent
-  when: skills_codex_legacy.stat.islnk | default(false)
+# Also runs as a Claude SessionStart hook, so new skills get linked without a playbook run.
+- name: Link each agent skill into Claude skills
+  ansible.builtin.command: "{{ home }}/.agents/link-claude-skills.sh"
+  changed_when: false
