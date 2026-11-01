@@ -1,5 +1,5 @@
 ---
-ai-sandbox:
+ai_sandbox:
   hosts:
     ai-sandbox-vm:
       ansible_host: 192.168.178.58 # 100.124.170.31

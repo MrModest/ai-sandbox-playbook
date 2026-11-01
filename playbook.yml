@@ -1,6 +1,6 @@
 ---
 - name: Provision AI coding agents (Claude Code, Codex, Pi)
-  hosts: ai-sandbox
+  hosts: ai_sandbox
   vars_files:
     - vars/vault.yml
   vars:
