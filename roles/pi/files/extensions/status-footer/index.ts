@@ -130,7 +130,7 @@ export default function (pi: ExtensionAPI) {
 						const warningMarker = Math.max(0, Math.min(dots - 1, Math.round((272000 / contextWindow) * dots)));
 						let bar = "";
 						for (let index = 0; index < dots; index += 1) {
-							if (index === warningMarker) bar += theme.fg("warning", "");
+							if (index === warningMarker) bar += theme.fg("warning", index < filled ? "●" : "○");
 							else if (index < filled) bar += statusColor(ctxColor, "●");
 							else bar += theme.fg("dim", "○");
 						}
