@@ -6,9 +6,9 @@
       "*": "ask",
       "{{ projects_dir }}/": "allow",
       "{{ projects_dir }}/*": "allow",
-      "{{ ansible_env.HOME }}/.pi": "allow",
-      "{{ ansible_env.HOME }}/.pi/*": "allow",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "allow"
+      "{{ home }}/.pi": "allow",
+      "{{ home }}/.pi/*": "allow",
+      "{{ home }}/.agents/skills/*": "allow"
     },
     "bash": {
       "*": "ask",
@@ -127,21 +127,21 @@
     "path_write": {
       "{{ projects_dir }}/": "ask",
       "{{ projects_dir }}/*": "ask",
-      "{{ ansible_env.HOME }}/.pi": "ask",
-      "{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
-      "{{ ansible_env.HOME }}/.nvm/versions/node/*/lib/node_modules": "ask",
-      "{{ ansible_env.HOME }}/.nvm/versions/node/*/lib/node_modules/*": "ask"
+      "{{ home }}/.pi": "ask",
+      "{{ home }}/.pi/*": "ask",
+      "{{ home }}/.agents/skills": "ask",
+      "{{ home }}/.agents/skills/*": "ask",
+      "{{ home }}/.nvm/versions/node/*/lib/node_modules": "ask",
+      "{{ home }}/.nvm/versions/node/*/lib/node_modules/*": "ask"
     },
     "path_read": {
       "*": "allow",
-      "{{ ansible_env.HOME }}/.pi/agent/auth.json": "ask",
-      "{{ ansible_env.HOME }}/.pi/agent/mcp-auth.json": "ask",
-      "{{ ansible_env.HOME }}/.pi/agent/mcp-oauth/*": "ask",
-      "{{ ansible_env.HOME }}/.pi/agent/mcp-oauth-encrypted/*": "ask",
-      "{{ ansible_env.HOME }}/.ssh/*": "ask",
-      "{{ ansible_env.HOME }}/.aws/credentials": "ask",
+      "{{ home }}/.pi/agent/auth.json": "ask",
+      "{{ home }}/.pi/agent/mcp-auth.json": "ask",
+      "{{ home }}/.pi/agent/mcp-oauth/*": "ask",
+      "{{ home }}/.pi/agent/mcp-oauth-encrypted/*": "ask",
+      "{{ home }}/.ssh/*": "ask",
+      "{{ home }}/.aws/credentials": "ask",
       "*/.env": "ask",
       "*/.env.*": "ask"
     },
