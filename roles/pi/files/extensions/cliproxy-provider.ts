@@ -18,6 +18,9 @@ const PROVIDER = "cliproxy";
 const BASE_URL = "https://cliproxy.modestlab.dev/v1";
 const API = "openai-responses";
 const THINKING_LEVELS = ["minimal", "low", "medium", "high", "xhigh", "max"] as const;
+// The proxy reports 272K for models that accept longer contexts; raise those.
+const DEFAULT_CONTEXT = 272_000;
+const LONG_CONTEXT = 1_050_000;
 
 interface CodexModel {
   slug: string;
@@ -61,7 +64,7 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
           ? Object.fromEntries(THINKING_LEVELS.map((l) => [l, efforts.has(l) ? l : null]))
           : undefined,
         input: m.input_modalities?.includes("image") ? ["text", "image"] : ["text"],
-        contextWindow: m.context_window!,
+        contextWindow: m.context_window === DEFAULT_CONTEXT ? LONG_CONTEXT : m.context_window!,
         maxTokens: m.max_tokens!,
         cost: prices.get(m.slug) ?? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
       } as ProviderModelConfig;
