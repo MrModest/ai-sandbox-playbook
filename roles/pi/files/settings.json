@@ -7,18 +7,19 @@
     "npm:@heyhuynhgiabuu/pi-search",
     "npm:pi-subagents",
     "npm:@gotgenes/pi-permission-system",
+    "npm:@mzwing/pi-permission-auto-review",
+    "npm:@geohar/pi-permissions-analyzer",
     "npm:pi-tool-display",
     "npm:pi-workspace-history",
     "npm:pi-effort",
     "npm:pi-mono-clear",
-    "npm:pi-mcp-adapter",
     "npm:@mrclrchtr/supi-context",
     "npm:pi-paster",
     "git:github.com/obra/superpowers",
     "npm:@pi-stef/superpowers-adapter"
   ],
-  "extensions": [
-    "-builtin:mcp"
+  "defaultTools": [
+    "+codemode"
   ],
   "defaultThinkingLevel": "medium",
   "hideThinkingBlock": false,
@@ -33,6 +34,6 @@
     "enabled": true
   },
   "theme": "dark",
-  "defaultProvider": "openai",
+  "defaultProvider": "cliproxy",
   "defaultModel": "gpt-5.6-sol"
 }

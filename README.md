@@ -51,9 +51,15 @@ The playbook is idempotent: a second run should report `changed=0`.
 
 ### Pi MCP
 
-Pi uses `pi-mcp-adapter`; Pi built-in MCP stays disabled. Shared server definitions render to `~/.pi/agent/mcp.json`, while adapter-only behavior lives in `~/.pi/agent/mcp-adapter.json`.
+Pi uses its built-in MCP. Servers render to `~/.pi/agent/mcp.json` with `exposure: "codemode"`, so Pi reaches them through the `codemode` tool; servers in `pi_mcp_direct` (`roles/pi/defaults/main.yml`) expose their tools directly. Run `/reload` after changing `mcp.json`.
 
-`mcpScript` is enabled for MCP-only JavaScript workflows: search, call, filter, aggregate, and return only selected output. `scriptSkill: "model"` exposes its usage skill to Pi automatically. Use compact `mcp(...)` calls for single lookups; use `mcpScript` for multi-call or bulk work. Run `/reload` after changing either MCP config file.
+### Pi models
+
+The `cliproxy-provider` extension registers a `cliproxy` provider whose models come from the proxy: OpenAI-owned chat models from `/v1/models`, with limits and reasoning levels from its Codex catalog and prices from Pi's built-in `openai` catalog. The list refreshes when interactive Pi starts and is cached for `pi -p`; run `pi` once after provisioning. Fix limits or missing prices with `modelOverrides` in `models.json`.
+
+### Pi permissions
+
+`pi-permission-system` asks before any bash command except a read-only allowlist (`rtk` reads, `jq`, `yq`, read-only `gh`), before writes to `~/Projects`, `~/.pi`, `~/.agents/skills` and global `node_modules`, and before reading credentials (`auth.json`, MCP OAuth, `~/.ssh`, `~/.aws/credentials`, `.env`). Asks go to `pi-permission-auto-review` first (`authorizerChain`), which approves or escalates to you; its model is set in `extensions/pi-permission-auto-review/config.json`.
 
 ## Layout
 

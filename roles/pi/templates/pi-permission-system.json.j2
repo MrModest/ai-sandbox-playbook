@@ -1,6 +1,5 @@
 {
   "$schema": "https://raw.githubusercontent.com/gotgenes/pi-permission-system/main/schemas/permissions.schema.json",
-
   "permission": {
     "*": "allow",
     "external_directory": {
@@ -11,30 +10,14 @@
       "{{ ansible_env.HOME }}/.pi/*": "allow",
       "{{ ansible_env.HOME }}/.agents/skills/*": "allow"
     },
-    "write": {
-      "*": "allow",
-      "{{ ansible_env.HOME }}/Projects/": "ask",
-      "{{ ansible_env.HOME }}/Projects/*": "ask",
-      "{{ ansible_env.HOME }}/.pi": "ask",
-      "{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask"
-    },
-    "edit": {
-      "*": "allow",
-      "{{ ansible_env.HOME }}/Projects/": "ask",
-      "{{ ansible_env.HOME }}/Projects/*": "ask",
-      "{{ ansible_env.HOME }}/.pi": "ask",
-      "{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask"
-    },
     "bash": {
-      "*": "allow",
-      "*{{ ansible_env.HOME }}/Projects": "ask",
-      "*{{ ansible_env.HOME }}/Projects/*": "ask",
-      "*{{ ansible_env.HOME }}/.pi": "ask",
-      "*{{ ansible_env.HOME }}/.pi/*": "ask",
-      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
-
+      "*": "ask",
+      "rtk *": "ask",
+      "rtk read *": "allow",
+      "rtk rg *": "allow",
+      "rtk ls *": "allow",
+      "rtk wc *": "allow",
+      "rtk git status *": "allow",
       "rm -rf /*": "deny",
       "rm -fr /*": "deny",
       "rm --recursive /*": "deny",
@@ -44,27 +27,257 @@
       "rm -rf $HOME*": "deny",
       "rm -fr $HOME*": "deny",
       "rm --recursive $HOME*": "deny",
-
       "dd *": "deny",
       "mkfs *": "deny",
       "format *": "deny",
-
       "sudo rm *": "deny",
       "sudo dd *": "deny",
-
       "chmod -R 777 /*": "deny",
       "chown -R * /*": "deny",
-
       "shred *": "deny",
       "wipefs *": "deny",
-
       "killall *": "deny",
       "pkill -9 *": "deny",
       "crontab -r*": "deny",
-
       "env": "deny",
       "printenv": "deny",
-      "printenv *": "deny"
+      "printenv *": "deny",
+      "jq *": "allow",
+      "rtk jq *": "allow",
+      "yq *": "allow",
+      "rtk yq *": "allow",
+      "gh *": "ask",
+      "gh --version": "allow",
+      "gh --help": "allow",
+      "gh api --help": "allow",
+      "gh pr list *": "allow",
+      "gh pr view *": "allow",
+      "gh pr checks *": "allow",
+      "gh pr status *": "allow",
+      "gh pr diff *": "allow",
+      "gh issue list *": "allow",
+      "gh issue view *": "allow",
+      "gh issue status *": "allow",
+      "gh repo view *": "allow",
+      "gh run list *": "allow",
+      "gh run view *": "allow",
+      "gh workflow list *": "allow",
+      "gh workflow view *": "allow",
+      "gh *--web*": "ask",
+      "gh *--browser*": "ask",
+      "rtk gh *": "ask",
+      "rtk gh --version": "allow",
+      "rtk gh --help": "allow",
+      "rtk gh api --help": "allow",
+      "rtk gh pr list *": "allow",
+      "rtk gh pr view *": "allow",
+      "rtk gh pr checks *": "allow",
+      "rtk gh pr status *": "allow",
+      "rtk gh pr diff *": "allow",
+      "rtk gh issue list *": "allow",
+      "rtk gh issue view *": "allow",
+      "rtk gh issue status *": "allow",
+      "rtk gh repo view *": "allow",
+      "rtk gh run list *": "allow",
+      "rtk gh run view *": "allow",
+      "rtk gh workflow list *": "allow",
+      "rtk gh workflow view *": "allow",
+      "rtk gh *--web*": "ask",
+      "rtk gh *--browser*": "ask",
+      "yq --inplace*": "ask",
+      "yq * --inplace*": "ask",
+      "yq --split-exp*": "ask",
+      "yq * --split-exp*": "ask",
+      "yq --split-exp-file*": "ask",
+      "yq * --split-exp-file*": "ask",
+      "yq --security-enable-system-operator*": "ask",
+      "yq * --security-enable-system-operator*": "ask",
+      "yq -*i*": "ask",
+      "yq * -*i*": "ask",
+      "yq -*s*": "ask",
+      "yq * -*s*": "ask",
+      "rtk yq --inplace*": "ask",
+      "rtk yq * --inplace*": "ask",
+      "rtk yq --split-exp*": "ask",
+      "rtk yq * --split-exp*": "ask",
+      "rtk yq --split-exp-file*": "ask",
+      "rtk yq * --split-exp-file*": "ask",
+      "rtk yq --security-enable-system-operator*": "ask",
+      "rtk yq * --security-enable-system-operator*": "ask",
+      "rtk yq -*i*": "ask",
+      "rtk yq * -*i*": "ask",
+      "rtk yq -*s*": "ask",
+      "rtk yq * -*s*": "ask",
+      "yq --version": "allow",
+      "yq --help": "allow",
+      "yq -V": "allow",
+      "yq -h": "allow",
+      "rtk yq --version": "allow",
+      "rtk yq --help": "allow",
+      "rtk yq -V": "allow",
+      "rtk yq -h": "allow",
+      "rtk grep *": "allow",
+      "rg *--pre*": "ask",
+      "rg *--hostname-bin*": "ask",
+      "rtk rg *--pre*": "ask",
+      "rtk rg *--hostname-bin*": "ask",
+      "rtk grep *--pre*": "ask",
+      "rtk grep *--hostname-bin*": "ask"
+    },
+    "path_write": {
+      "{{ ansible_env.HOME }}/Projects/": "ask",
+      "{{ ansible_env.HOME }}/Projects/*": "ask",
+      "{{ ansible_env.HOME }}/.pi": "ask",
+      "{{ ansible_env.HOME }}/.pi/*": "ask",
+      "{{ ansible_env.HOME }}/.agents/skills": "ask",
+      "{{ ansible_env.HOME }}/.agents/skills/*": "ask",
+      "{{ ansible_env.HOME }}/.nvm/versions/node/*/lib/node_modules": "ask",
+      "{{ ansible_env.HOME }}/.nvm/versions/node/*/lib/node_modules/*": "ask"
+    },
+    "path_read": {
+      "*": "allow",
+      "{{ ansible_env.HOME }}/.pi/agent/auth.json": "ask",
+      "{{ ansible_env.HOME }}/.pi/agent/mcp-auth.json": "ask",
+      "{{ ansible_env.HOME }}/.pi/agent/mcp-oauth/*": "ask",
+      "{{ ansible_env.HOME }}/.pi/agent/mcp-oauth-encrypted/*": "ask",
+      "{{ ansible_env.HOME }}/.ssh/*": "ask",
+      "{{ ansible_env.HOME }}/.aws/credentials": "ask",
+      "*/.env": "ask",
+      "*/.env.*": "ask"
+    },
+    "external_directory_read": {
+      "*": "allow"
     }
-  }
+  },
+  "commandEffects": {
+    "rtk": {
+      "subcommands": {
+        "read": "read",
+        "ls": "read",
+        "wc": "read",
+        "rg": {
+          "effects": "read",
+          "unlessOption": [
+            "--pre",
+            "--hostname-bin"
+          ]
+        },
+        "grep": {
+          "effects": "read",
+          "unlessOption": [
+            "--pre",
+            "--hostname-bin"
+          ]
+        },
+        "jq": {
+          "effects": "read"
+        },
+        "yq": {
+          "effects": "read",
+          "unlessOption": [
+            "-i",
+            "--inplace",
+            "-s",
+            "--split-exp",
+            "--split-exp-file",
+            "--security-enable-system-operator"
+          ]
+        },
+        "gh": {
+          "subcommands": {
+            "pr": {
+              "subcommands": {
+                "list": "read",
+                "view": "read",
+                "checks": "read",
+                "status": "read",
+                "diff": "read"
+              }
+            },
+            "issue": {
+              "subcommands": {
+                "list": "read",
+                "view": "read",
+                "status": "read"
+              }
+            },
+            "repo": {
+              "subcommands": {
+                "view": "read"
+              }
+            },
+            "run": {
+              "subcommands": {
+                "list": "read",
+                "view": "read"
+              }
+            },
+            "workflow": {
+              "subcommands": {
+                "list": "read",
+                "view": "read"
+              }
+            }
+          }
+        }
+      }
+    },
+    "nl": {
+      "effects": "read"
+    },
+    "jq": {
+      "effects": "read"
+    },
+    "yq": {
+      "effects": "read",
+      "unlessOption": [
+        "-i",
+        "--inplace",
+        "-s",
+        "--split-exp",
+        "--split-exp-file",
+        "--security-enable-system-operator"
+      ]
+    },
+    "gh": {
+      "subcommands": {
+        "pr": {
+          "subcommands": {
+            "list": "read",
+            "view": "read",
+            "checks": "read",
+            "status": "read",
+            "diff": "read"
+          }
+        },
+        "issue": {
+          "subcommands": {
+            "list": "read",
+            "view": "read",
+            "status": "read"
+          }
+        },
+        "repo": {
+          "subcommands": {
+            "view": "read"
+          }
+        },
+        "run": {
+          "subcommands": {
+            "list": "read",
+            "view": "read"
+          }
+        },
+        "workflow": {
+          "subcommands": {
+            "list": "read",
+            "view": "read"
+          }
+        }
+      }
+    }
+  },
+  "authorizerChain": [
+    "auto-review"
+  ]
 }

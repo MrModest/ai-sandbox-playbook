@@ -21,7 +21,7 @@
 - name: Write Pi MCP servers
   ansible.builtin.copy:
     dest: "{{ home }}/.pi/agent/mcp.json"
-    content: "{{ {'mcpServers': mcp_servers} | to_nice_json }}"
+    content: "{{ {'mcpServers': pi_mcp_servers} | to_nice_json }}"
     mode: "0600"
 
 - name: Template Pi permission-system config
@@ -33,7 +33,7 @@
 - name: Write Pi auth
   ansible.builtin.copy:
     dest: "{{ home }}/.pi/agent/auth.json"
-    content: "{{ {'openai': {'type': 'api_key', 'key': vault_pi_openai_api_key}} | to_nice_json }}"
+    content: "{{ {'cliproxy': {'type': 'api_key', 'key': vault_pi_openai_api_key}} | to_nice_json }}"
     mode: "0600"
 
 - name: Install Pi packages

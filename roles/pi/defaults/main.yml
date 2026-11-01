@@ -1,2 +1,9 @@
 ---
 pi_packages: "{{ (lookup('file', role_path + '/files/settings.json') | from_json).packages }}"
+# Built-in MCP: servers sit behind codemode unless listed as direct.
+pi_mcp_direct: [hatchdoor]
+pi_mcp_servers: >-
+  {{ ((mcp_servers | dict2items | rejectattr('key', 'in', pi_mcp_direct)
+       | map('combine', {'value': {'exposure': 'codemode'}}, recursive=true) | list)
+    + (mcp_servers | dict2items | selectattr('key', 'in', pi_mcp_direct) | list))
+   | items2dict }}
