@@ -54,6 +54,10 @@
     "defaultMode": "auto"
   },
   "model": "opus",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "enableAllProjectMcpServers": true,
   "hooks": {
     "PreToolUse": [
