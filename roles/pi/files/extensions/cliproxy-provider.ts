@@ -46,8 +46,9 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
 
   return catalog.models
     // Image models (gpt-image-*) are listed like chat models in the Codex catalog; only
-    // their missing max_tokens tells them apart.
-    .filter((m) => openai.has(m.slug) && m.max_tokens)
+    // their missing max_tokens tells them apart. Pi requires both limits, so a model
+    // without them is skipped rather than given made-up ones.
+    .filter((m) => openai.has(m.slug) && m.max_tokens && m.context_window)
     .map((m) => {
       const efforts = new Set((m.supported_reasoning_levels ?? []).map((l) => l.effort));
       return {
@@ -59,7 +60,7 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
           ? Object.fromEntries(THINKING_LEVELS.map((l) => [l, efforts.has(l) ? l : null]))
           : undefined,
         input: m.input_modalities?.includes("image") ? ["text", "image"] : ["text"],
-        contextWindow: m.context_window ?? 272_000,
+        contextWindow: m.context_window!,
         maxTokens: m.max_tokens!,
         cost: prices.get(m.slug) ?? { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
       } as ProviderModelConfig;
