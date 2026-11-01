@@ -4,8 +4,8 @@
     "*": "allow",
     "external_directory": {
       "*": "ask",
-      "{{ ansible_env.HOME }}/Projects/": "allow",
-      "{{ ansible_env.HOME }}/Projects/*": "allow",
+      "{{ projects_dir }}/": "allow",
+      "{{ projects_dir }}/*": "allow",
       "{{ ansible_env.HOME }}/.pi": "allow",
       "{{ ansible_env.HOME }}/.pi/*": "allow",
       "{{ ansible_env.HOME }}/.agents/skills/*": "allow"
@@ -125,8 +125,8 @@
       "rtk grep *--hostname-bin*": "ask"
     },
     "path_write": {
-      "{{ ansible_env.HOME }}/Projects/": "ask",
-      "{{ ansible_env.HOME }}/Projects/*": "ask",
+      "{{ projects_dir }}/": "ask",
+      "{{ projects_dir }}/*": "ask",
       "{{ ansible_env.HOME }}/.pi": "ask",
       "{{ ansible_env.HOME }}/.pi/*": "ask",
       "{{ ansible_env.HOME }}/.agents/skills": "ask",

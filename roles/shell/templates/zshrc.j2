@@ -40,8 +40,8 @@ alias tree-dirs='eza -T --only-dirs -lahg --icons=always --group-directories-fir
 (( $+commands[zoxide] )) && alias cd='z'
 (( $+commands[zoxide] )) && alias cdi='zi'
 
-cdp() { builtin cd "$HOME/Projects/$1"; }
-_cdp() { (( CURRENT == 2 )) && _files -/ -W "$HOME/Projects/$1"; }
+cdp() { builtin cd "{{ projects_dir }}/$1"; }
+_cdp() { (( CURRENT == 2 )) && _files -/ -W "{{ projects_dir }}/$1"; }
 compdef _cdp cdp
 
 y() {

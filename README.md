@@ -59,7 +59,7 @@ The `cliproxy-provider` extension registers a `cliproxy` provider whose models c
 
 ### Pi permissions
 
-`pi-permission-system` asks before any bash command except a read-only allowlist (`rtk` reads, `jq`, `yq`, read-only `gh`), before writes to `~/Projects`, `~/.pi`, `~/.agents/skills` and global `node_modules`, and before reading credentials (`auth.json`, MCP OAuth, `~/.ssh`, `~/.aws/credentials`, `.env`). Asks go to `pi-permission-auto-review` first (`authorizerChain`), which approves or escalates to you; its model is set in `extensions/pi-permission-auto-review/config.json`.
+`pi-permission-system` asks before any bash command except a read-only allowlist (`rtk` reads, `jq`, `yq`, read-only `gh`), before writes to `projects_dir` (`~/projects`), `~/.pi`, `~/.agents/skills` and global `node_modules`, and before reading credentials (`auth.json`, MCP OAuth, `~/.ssh`, `~/.aws/credentials`, `.env`). Asks go to `pi-permission-auto-review` first (`authorizerChain`), which approves or escalates to you; its model is set in `extensions/pi-permission-auto-review/config.json`.
 
 ## Layout
 

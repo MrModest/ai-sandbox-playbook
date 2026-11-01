@@ -7,6 +7,7 @@
     ansible_become_pass: "{{ vault_become_pass }}"
     home: "/home/{{ ansible_user }}"
     local_bin: "{{ home }}/.local/bin"
+    projects_dir: "{{ ansible_env.HOME }}/projects"
     node_version: "24.14.0"
     node_bin: "{{ home }}/.nvm/versions/node/v{{ node_version }}/bin"
     # Single source of MCP servers, rendered into every harness's own config format.
