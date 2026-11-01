@@ -45,10 +45,11 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
   const prices = new Map(getBuiltinModels("openai").map((m) => [m.id, m.cost]));
 
   return catalog.models
-    // Image models (gpt-image-*) are listed like chat models in the Codex catalog; only
-    // their missing max_tokens tells them apart. Pi requires both limits, so a model
-    // without them is skipped rather than given made-up ones.
-    .filter((m) => openai.has(m.slug) && m.max_tokens && m.context_window)
+    .filter((m) =>
+      openai.has(m.slug) // only OpenAI-account models for now
+      && m.max_tokens // image models (gpt-image-*) look like chat models in the Codex catalog; only their missing max_tokens tells them apart
+      && m.context_window // Pi requires both limits, so a model without them is skipped rather than given made-up ones
+    )
     .map((m) => {
       const efforts = new Set((m.supported_reasoning_levels ?? []).map((l) => l.effort));
       return {
