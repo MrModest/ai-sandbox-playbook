@@ -30,11 +30,25 @@
     dest: "{{ home }}/.pi/agent/extensions/pi-permission-system/config.json"
     mode: "0644"
 
+- name: Read Pi auth
+  ansible.builtin.slurp:
+    src: "{{ home }}/.pi/agent/auth.json"
+  register: pi_auth
+  failed_when: false
+
+- name: Parse Pi auth
+  ansible.builtin.set_fact:
+    pi_auth_data: "{{ pi_auth.content | default('e30=') | b64decode | from_json }}"
+    pi_auth_cliproxy: { type: api_key, key: "{{ vault_pi_openai_api_key }}" }
+
+# Merge, not overwrite: /login stores OAuth tokens (e.g. openai-codex) in the same file,
+# and Pi rewrites it with its own formatting, so only write when the cliproxy key differs.
 - name: Write Pi auth
   ansible.builtin.copy:
     dest: "{{ home }}/.pi/agent/auth.json"
-    content: "{{ {'cliproxy': {'type': 'api_key', 'key': vault_pi_openai_api_key}} | to_nice_json }}"
+    content: "{{ pi_auth_data | combine({'cliproxy': pi_auth_cliproxy}) | to_nice_json }}"
     mode: "0600"
+  when: pi_auth_data.cliproxy | default({}) != pi_auth_cliproxy
 
 - name: Install Pi packages
   ansible.builtin.command: "pi install {{ item }}"
