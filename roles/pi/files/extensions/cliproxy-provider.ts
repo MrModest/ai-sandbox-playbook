@@ -11,9 +11,7 @@
  * every other refresh is offline, so the list is persisted and served from there.
  */
 
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { getAgentDir, type ExtensionAPI, type ProviderModelConfig } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, ProviderModelConfig } from "@earendil-works/pi-coding-agent";
 import { getBuiltinModels } from "@earendil-works/pi-ai/providers/all";
 
 const PROVIDER = "cliproxy";
@@ -72,18 +70,13 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
 }
 
 export default function (pi: ExtensionAPI) {
-  let cachedModels: ProviderModelConfig[] = [];
-  try {
-    const store = JSON.parse(readFileSync(join(getAgentDir(), "models-store.json"), "utf8"));
-    if (Array.isArray(store[PROVIDER]?.models)) cachedModels = store[PROVIDER].models;
-  } catch {
-    // A missing or unreadable cache is filled by the normal model refresh.
-  }
+  pi.on("session_start", async (_event, ctx) => {
+    await ctx.modelRegistry.refresh({ allowNetwork: false, providers: [PROVIDER] });
+  });
   pi.registerProvider(PROVIDER, {
     name: "CLIProxy",
     baseUrl: BASE_URL,
     api: API,
-    models: cachedModels,
     async refreshModels(context) {
       const stored = context.stored?.models as ProviderModelConfig[] | undefined;
       const key = context.credential?.type === "api_key" ? context.credential.key : undefined;
