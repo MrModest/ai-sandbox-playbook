@@ -70,6 +70,9 @@ async function fetchModels(key: string, signal: AbortSignal): Promise<ProviderMo
 }
 
 export default function (pi: ExtensionAPI) {
+  pi.on("session_start", async (_event, ctx) => {
+    await ctx.modelRegistry.refresh({ allowNetwork: false, providers: [PROVIDER] });
+  });
   pi.registerProvider(PROVIDER, {
     name: "CLIProxy",
     baseUrl: BASE_URL,
