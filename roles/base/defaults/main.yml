@@ -2,5 +2,6 @@
 base_rtk_version: "v0.50.0"
 base_hl_version: "v0.36.3"
 base_yq_version: "v4.54.1"
+base_herdr_core_version: "0.1.19"
 base_uv_tools:
   - { name: serena-agent, version: "1.7.0", python: "3.13" }

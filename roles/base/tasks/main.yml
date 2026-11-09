@@ -48,26 +48,31 @@
     dest: "{{ local_bin }}/yq"
     mode: "0755"
 
-- name: Install rtk and hl
+- name: Install rtk, hl and herdr-core
   ansible.builtin.unarchive:
     src: "{{ item.url }}"
     dest: "{{ local_bin }}"
     remote_src: true
+    include: ["{{ item.bin }}"]
     creates: "{{ local_bin }}/{{ item.bin }}"
   loop:
     - { bin: rtk, url: "https://github.com/rtk-ai/rtk/releases/download/{{ base_rtk_version }}/rtk-x86_64-unknown-linux-musl.tar.gz" }
     - { bin: hl, url: "https://github.com/pamburus/hl/releases/download/{{ base_hl_version }}/hl-linux-x86_64-gnu.tar.gz" }
+    - { bin: herdr-core, url: "https://releases.herdr.dev/core/{{ base_herdr_core_version }}/herdr-core-linux-x86_64.tar.gz" }
 
-- name: Install herdr and uv
-  ansible.builtin.shell: "set -o pipefail && curl -fsSL {{ item.url }} | sh"
+- name: Link hc to herdr-core
+  ansible.builtin.file:
+    src: herdr-core
+    dest: "{{ local_bin }}/hc"
+    state: link
+
+- name: Install uv
+  ansible.builtin.shell: "set -o pipefail && curl -fsSL https://astral.sh/uv/install.sh | sh"
   args:
     executable: /bin/bash
-    creates: "{{ local_bin }}/{{ item.bin }}"
+    creates: "{{ local_bin }}/uv"
   environment:
     INSTALLER_NO_MODIFY_PATH: "1"
-  loop:
-    - { bin: herdr, url: "https://herdr.dev/install.sh" }
-    - { bin: uv, url: "https://astral.sh/uv/install.sh" }
 
 - name: List uv tools
   ansible.builtin.command: uv tool list
@@ -83,18 +88,17 @@
   vars:
     base_uv_installed: "{{ ((base_uv_list.stdout | regex_search('(?m)^' ~ (item.name | regex_escape) ~ ' v(\\S+)$', '\\1')) or ['0']) | first }}"
 
-- name: Create rtk and herdr config dirs
+- name: Create rtk config dir
   ansible.builtin.file:
     path: "{{ home }}/.config/{{ item }}"
     state: directory
     mode: "0755"
-  loop: [rtk, herdr]
+  loop: [rtk]
 
-- name: Copy rtk and herdr configs
+- name: Copy rtk config
   ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ home }}/.config/{{ item.dest }}"
     mode: "0644"
   loop:
     - { src: rtk.toml, dest: rtk/config.toml }
-    - { src: herdr.toml, dest: herdr/config.toml }

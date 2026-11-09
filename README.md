@@ -65,7 +65,7 @@ The `cliproxy-provider` extension registers a `cliproxy` provider whose models c
 
 | Role | Installs |
 |---|---|
-| `base` | Ansible, apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr, uv, serena + rtk/herdr configs |
+| `base` | Ansible, apt packages (incl. `gh` from GitHub's repo), fd, yq, rtk, hl, herdr-core (`hc`, for the Herdr app on your Mac), uv, serena + rtk config |
 | `nodejs` | nvm, Node, pnpm, global npm packages (codex, gitnexus, TypeScript LSP, agent-browser + its Chrome) |
 | `skills` | `~/.agents/skills`, shared by all harnesses (Codex and Pi read it natively; Claude gets a per-skill symlink in `~/.claude/skills`, refreshed by a SessionStart hook) |
 | `claude` | Claude Code, plugin marketplaces and enabled plugins, settings, `CLAUDE.md`, statusline, MCP servers |
@@ -75,4 +75,4 @@ The `cliproxy-provider` extension registers a `cliproxy` provider whose models c
 
 MCP servers are declared once in `playbook.yml` (`mcp_servers`) and rendered into each harness's own format. MCPs bundled with plugins or extensions aren't listed there.
 
-Versions in each role's `defaults/main.yml` are minimums: a tool is installed when missing or older, and a newer one (e.g. after `pi update`) is never downgraded. Standalone binaries (rtk, hl, yq, herdr, starship, Claude Code) are only installed when missing. `node_version` is in `playbook.yml`.
+Versions in each role's `defaults/main.yml` are minimums: a tool is installed when missing or older, and a newer one (e.g. after `pi update`) is never downgraded. Standalone binaries (rtk, hl, yq, herdr-core, starship, Claude Code) are only installed when missing. `node_version` is in `playbook.yml`.
